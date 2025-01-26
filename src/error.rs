@@ -131,22 +131,22 @@ impl IntoResponse for ApiError {
                 },
             ),
             ApiError::DeepSeekError { message, type_, param, code } => (
-                StatusCode::BAD_GATEWAY,
+                StatusCode::BAD_REQUEST,
                 ErrorResponse {
                     error: ErrorDetails {
-                        message: message.clone(),
-                        type_: type_.clone(),
+                        message: format!("DeepSeek API Error: {}", message),
+                        type_: format!("deepseek_{}", type_),
                         param: param.clone(),
                         code: code.clone(),
                     },
                 },
             ),
             ApiError::AnthropicError { message, type_, param, code } => (
-                StatusCode::BAD_GATEWAY,
+                StatusCode::BAD_REQUEST,
                 ErrorResponse {
                     error: ErrorDetails {
-                        message: message.clone(),
-                        type_: type_.clone(),
+                        message: format!("Anthropic API Error: {}", message),
+                        type_: format!("anthropic_{}", type_),
                         param: param.clone(),
                         code: code.clone(),
                     },
