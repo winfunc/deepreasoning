@@ -1,0 +1,15 @@
+services:
+  api:
+    build: .
+    container_name: deepclaude_api
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1337:1337"
+    volumes:
+      - ./config.toml:/usr/local/bin/config.toml
+    networks:
+      - deepclaude_network
+
+networks:
+  deepclaude_network:
+    name: deepclaude_network

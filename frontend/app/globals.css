@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Base grid pattern */
+  .bg-dots-base {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M0 0h1v1H0z' fill='rgb(255 255 255 / 0.15)'/%3E%3C/svg%3E");
+  }
+
+  /* Diagonal lines pattern */
+  .bg-lines {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l60 60M30 0l30 60M0 30l30 30' stroke='rgb(255 255 255 / 0.1)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  }
+
+  /* Small dots pattern */
+  .bg-dots-small {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='rgb(255 255 255 / 0.12)'/%3E%3C/svg%3E");
+    transform: rotate(30deg);
+  }
+
+  /* Combined pattern class */
+  .bg-pattern-combined {
+    @apply bg-dots-base bg-lines bg-dots-small;
+    background-size: 40px 40px, 60px 60px, 20px 20px;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Markdown Styles */
+.prose pre {
+  @apply bg-secondary text-secondary-foreground p-4 rounded-lg overflow-x-auto;
+}
+
+.prose code {
+  @apply bg-secondary text-secondary-foreground px-1.5 py-0.5 rounded;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-sm;
+}
+
+.prose img {
+  @apply rounded-lg;
+}
+
+.prose a {
+  @apply text-primary underline-offset-4 hover:text-primary/80;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary/20 pl-4 italic;
+}
+
+.prose ul {
+  @apply list-disc list-outside;
+}
+
+.prose ol {
+  @apply list-decimal list-outside;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  @apply font-semibold text-foreground scroll-m-20;
+}
+
+.prose h1 {
+  @apply text-3xl lg:text-4xl;
+}
+
+.prose h2 {
+  @apply text-2xl lg:text-3xl;
+}
+
+.prose h3 {
+  @apply text-xl lg:text-2xl;
+}
+
+.prose h4 {
+  @apply text-lg lg:text-xl;
+}
+
+/* Streaming text animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(1px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stream {
+  animation: fadeIn 0.15s ease-out forwards;
+}
+
+/* Sidebar Transitions */
+@media (max-width: 1024px) {
+  .sidebar-open {
+    overflow: hidden;
+  }
+}
+
+/* Custom scrollbar for dark mode */
+/* Custom scrollbar for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
+
+/* Sidebar scrollbar styling */
+.dark .sidebar-scroll::-webkit-scrollbar {
+  width: 2px;
+}
+
+.dark .sidebar-scroll::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+.dark .sidebar-scroll::-webkit-scrollbar-thumb {
+  @apply bg-muted/30 rounded-full hover:bg-muted/50 transition-colors;
+}
+
+/* Smooth transitions */
+.message-transition {
+  transition: opacity 0.2s ease-in-out, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.message-transition[data-loaded="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.virtual-item-transition {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Content fade transitions */
+.content-fade {
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.content-fade[data-streaming="true"] {
+  opacity: 1;
+}
+
+/* Initial state for all content */
+.message-content {
+  opacity: 1;
+}
+
+/* Add this to your existing globals.css */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--primary) / 0.1) 0%,
+    rgba(var(--primary) / 0.15) 50%,
+    rgba(var(--primary) / 0.1) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 8s linear infinite;
+}

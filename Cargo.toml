@@ -1,0 +1,45 @@
+[package]
+name = "deepclaude"
+version = "0.1.0"
+edition = "2021"
+description = "A high-performance LLM inference API and Chat UI that integrates DeepSeek R1's CoT reasoning traces with Anthropic Claude models."
+authors = ["Mufeed VH <mufeed@asterisk.so>"]
+
+[dependencies]
+# Web framework
+axum = { version = "0.8", features = ["json", "macros"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["trace", "cors"] }
+
+# Async runtime
+tokio = { version = "1.4", features = ["full"] }
+tokio-stream = "0.1"
+futures = "0.3"
+async-stream = "0.3"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "stream"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Configuration
+config = { version = "0.15", features = ["toml"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Utilities
+once_cell = "1.20"
+
+# OpenSSL (vendored)
+openssl = { version = "0.10", features = ["vendored"] }

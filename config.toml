@@ -1,0 +1,30 @@
+# Server Configuration
+[server]
+host = "127.0.0.1"
+port = 1337
+
+# Pricing Configuration (per million tokens)
+[pricing]
+[pricing.deepseek]
+input_cache_hit_price = 0.14
+input_cache_miss_price = 0.55
+output_price = 2.19
+
+[pricing.anthropic]
+[pricing.anthropic.claude_3_sonnet]
+input_price = 3.0
+output_price = 15.0
+cache_write_price = 3.75
+cache_read_price = 0.30
+
+[pricing.anthropic.claude_3_haiku]
+input_price = 0.80
+output_price = 4.0
+cache_write_price = 1.0
+cache_read_price = 0.08
+
+[pricing.anthropic.claude_3_opus]
+input_price = 15.0
+output_price = 75.0
+cache_write_price = 18.75
+cache_read_price = 1.50
