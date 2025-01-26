@@ -5,7 +5,7 @@ import { Chat } from "../../components/chat"
 import { Settings } from "../../components/settings"
 
 export default function ChatPage() {
-  const [selectedModel, setSelectedModel] = useState("claude-3-sonnet-20241022")
+  const [selectedModel, setSelectedModel] = useState("claude-3-5-sonnet-20241022")
   const [apiTokens, setApiTokens] = useState({
     deepseekApiToken: "",
     anthropicApiToken: ""
@@ -14,7 +14,6 @@ export default function ChatPage() {
   return (
     <main className="relative min-h-screen">
       <Settings 
-        onModelChange={setSelectedModel}
         onSettingsChange={setApiTokens}
       />
       <Chat 

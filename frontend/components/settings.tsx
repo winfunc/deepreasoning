@@ -13,15 +13,6 @@ import { Textarea } from "./ui/textarea"
 import { Input } from "./ui/input"
 import { useForm } from "react-hook-form"
 
-const models = [
-  "claude-3-sonnet-20241022",
-  "claude-3-sonnet-latest", 
-  "claude-3-haiku-20241022",
-  "claude-3-haiku-latest",
-  "claude-3-opus-20240229",
-  "claude-3-opus-latest"
-]
-
 interface SettingsFormValues {
   model: string
   systemPrompt: string
@@ -34,18 +25,16 @@ interface SettingsFormValues {
 }
 
 interface SettingsProps {
-  onModelChange: (model: string) => void
   onSettingsChange: (settings: { deepseekApiToken: string; anthropicApiToken: string }) => void
 }
 
-export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
+export function Settings({ onSettingsChange }: SettingsProps) {
   const [open, setOpen] = useState(false)
   const { toast } = useToast()
   const posthog = usePostHog()
   
   const form = useForm<SettingsFormValues>({
     defaultValues: {
-      model: "claude-3-sonnet-20241022",
       systemPrompt: "You are a helpful AI assistant who excels at reasoning and responds in Markdown format. For code snippets, you wrap them in Markdown codeblocks with it's language specified.",
       deepseekApiToken: "",
       anthropicApiToken: "",
@@ -62,18 +51,16 @@ export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
     if (savedSettings) {
       const settings = JSON.parse(savedSettings)
       form.reset(settings)
-      onModelChange(settings.model)
       onSettingsChange({
         deepseekApiToken: settings.deepseekApiToken,
         anthropicApiToken: settings.anthropicApiToken
       })
     }
-  }, [form, onModelChange, onSettingsChange])
+  }, [form, onSettingsChange])
 
   // Debounced save function
   const debouncedSave = useCallback((data: SettingsFormValues) => {
     localStorage.setItem('deepclaude-settings', JSON.stringify(data))
-    onModelChange(data.model)
     onSettingsChange({
       deepseekApiToken: data.deepseekApiToken,
       anthropicApiToken: data.anthropicApiToken
@@ -97,7 +84,7 @@ export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
       description: "Settings saved to local storage",
       duration: 2000,
     })
-  }, [onModelChange, onSettingsChange, toast, posthog])
+  }, [onSettingsChange, toast, posthog])
 
   const debouncedSaveCallback = useMemo(
     () => debounce(debouncedSave, 1000),
@@ -118,7 +105,6 @@ export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
 
   const handleReset = () => {
     form.reset({
-      model: "claude-3-sonnet-20241022",
       systemPrompt: "You are a helpful AI assistant who excels at reasoning and responds in Markdown format. For code snippets, you wrap them in Markdown codeblocks with it's language specified.",
       deepseekApiToken: "",
       anthropicApiToken: "",
@@ -128,7 +114,6 @@ export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
       anthropicBody: []
     })
     localStorage.removeItem('deepclaude-settings')
-    onModelChange("claude-3-sonnet-20241022")
     onSettingsChange({
       deepseekApiToken: "",
       anthropicApiToken: ""
@@ -240,7 +225,6 @@ export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
                 onClick={() => {
                   const data = form.getValues()
                   localStorage.setItem('deepclaude-settings', JSON.stringify(data))
-                  onModelChange(data.model)
                   onSettingsChange({
                     deepseekApiToken: data.deepseekApiToken,
                     anthropicApiToken: data.anthropicApiToken
@@ -261,35 +245,6 @@ export function Settings({ onModelChange, onSettingsChange }: SettingsProps) {
         </SheetHeader>
         <Form {...form}>
           <form className="space-y-6 pt-6">
-            <FormField
-              control={form.control}
-              name="model"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Model</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value)
-                      onModelChange(value)
-                    }}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a model" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {models.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
 
             <div className="space-y-6">
               <FormField

@@ -66,7 +66,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
   const formatElapsedTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
-    
+
     if (minutes === 0) {
       return `${remainingSeconds} seconds`
     }
@@ -79,13 +79,13 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
       if (!thinkingStartTime) {
         setThinkingStartTime(Date.now())
       }
-      
+
       const interval = setInterval(() => {
         if (thinkingStartTime) {
           setElapsedTime(Math.floor((Date.now() - thinkingStartTime) / 1000))
         }
       }, 1000)
-      
+
       return () => clearInterval(interval)
     }
   }, [isLoading, thinkingStartTime, isThinkingComplete])
@@ -152,8 +152,8 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
 
   // Create a new chat
   const createNewChat = () => {
-    const chatId = typeof crypto.randomUUID === 'function' 
-      ? crypto.randomUUID() 
+    const chatId = typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
       : generateUUID()
     const newChat: StoredChat = {
       id: chatId,
@@ -180,8 +180,8 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
             return {
               ...chat,
               messages,
-              title: chat.messages.length === 0 && messages[0] ? 
-                generateChatTitle(messages[0].content) : 
+              title: chat.messages.length === 0 && messages[0] ?
+                generateChatTitle(messages[0].content) :
                 chat.title
             }
           }
@@ -196,7 +196,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
   useEffect(() => {
     updateCurrentChat()
   }, [messages, updateCurrentChat])
-  
+
   // Ref for current message
   const currentMessageRef = useRef<Message | null>(null)
   const scrollRef = useRef<number | null>(null)
@@ -220,10 +220,10 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
       const match = /language-(\w+)/.exec(className || "")
       const language = match ? match[1] : "text"
       const content = String(children).replace(/\n$/, "")
-      
+
       // Check if it's a code block (has language or multiple lines)
       const isCodeBlock = match || content.includes("\n")
-      
+
       if (!inline && isCodeBlock) {
         return (
           <div className="relative">
@@ -253,7 +253,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
           </div>
         )
       }
-      
+
       // For inline code or single backticks
       return (
         <code className={className} {...props}>
@@ -284,7 +284,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
   const handleScroll = useCallback(() => {
     const container = document.getElementById('chat-container')
     if (!container || isScrolling) return
-    
+
     const { scrollTop, scrollHeight, clientHeight } = container
     const isAtBottom = scrollHeight - (scrollTop + clientHeight) < 50
     setIsAutoScrollEnabled(isAtBottom)
@@ -367,7 +367,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground">
-                        {isThinkingComplete 
+                        {isThinkingComplete
                           ? `Thought for ${formatElapsedTime(elapsedTime)}`
                           : formatElapsedTime(elapsedTime)}
                       </span>
@@ -421,8 +421,8 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
     // Create new chat if none exists
     if (!currentChatId) {
       const newChat: StoredChat = {
-        id: typeof crypto.randomUUID === 'function' 
-          ? crypto.randomUUID() 
+        id: typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
           : generateUUID(),
         title: generateChatTitle(input),
         timestamp: new Date().toISOString(),
@@ -447,6 +447,27 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
     const controller = new AbortController()
 
     try {
+      const requestBody = {
+        stream: true,
+        system: "You are a helpful AI assistant who excels at reasoning and responds in Markdown format. For code snippets, you wrap them in Markdown codeblocks with it's language specified.",
+        verbose: false,
+        messages: [...messages, { content: input, role: "user" }].map(msg => ({
+          content: msg.content,
+          role: msg.role
+        })),
+        deepseek_config: {
+          headers: {},
+          body: { temperature: 0 }
+        },
+        anthropic_config: {
+          headers: { "anthropic-version": "2023-06-01" },
+          body: {
+            temperature: 0,
+            model: selectedModel
+          }
+        }
+      }
+
       const response = await fetch("https://api.deepclaude.com", {
         method: "POST",
         signal: controller.signal,
@@ -456,23 +477,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
           "X-DeepSeek-API-Token": apiTokens.deepseekApiToken,
           "X-Anthropic-API-Token": apiTokens.anthropicApiToken
         },
-        body: JSON.stringify({
-          stream: true,
-          system: "You are a helpful AI assistant who excels at reasoning and responds in Markdown format. For code snippets, you wrap them in Markdown codeblocks with it's language specified.",
-          verbose: false,
-          messages: [...messages, { content: input, role: "user" }].map(msg => ({
-            content: msg.content,
-            role: msg.role
-          })),
-          deepseek_config: {
-            headers: {},
-            body: { temperature: 0 }
-          },
-          anthropic_config: {
-            headers: { "anthropic-version": "2023-06-01" },
-            body: { temperature: 0 }
-          }
-        })
+        body: JSON.stringify(requestBody)
       })
 
       const reader = response.body?.getReader()
@@ -489,9 +494,9 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
 
       const processLine = (line: string) => {
         if (!line.trim() || !line.startsWith("data: ")) return
-        
+
         const data = JSON.parse(line.slice(6))
-        
+
         if (data.type === "content") {
           for (const content of data.content) {
             if (!currentMessageRef.current) return
@@ -513,12 +518,12 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
                 setMessages(prev => {
                   // Avoid unnecessary array operations if content hasn't changed
                   const lastMessage = prev[prev.length - 1]
-                  if (lastMessage?.role === "assistant" && 
-                      lastMessage.content === currentMessageRef.current!.content && 
-                      lastMessage.thinking === currentMessageRef.current!.thinking) {
+                  if (lastMessage?.role === "assistant" &&
+                    lastMessage.content === currentMessageRef.current!.content &&
+                    lastMessage.thinking === currentMessageRef.current!.thinking) {
                     return prev
                   }
-                  
+
                   // Create new array only when content has changed
                   if (lastMessage?.role === "assistant") {
                     const newMessages = [...prev]
@@ -539,12 +544,12 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
               setMessages(prev => {
                 // Avoid unnecessary array operations if content hasn't changed
                 const lastMessage = prev[prev.length - 1]
-                if (lastMessage?.role === "assistant" && 
-                    lastMessage.content === currentMessageRef.current!.content && 
-                    lastMessage.thinking === currentMessageRef.current!.thinking) {
+                if (lastMessage?.role === "assistant" &&
+                  lastMessage.content === currentMessageRef.current!.content &&
+                  lastMessage.thinking === currentMessageRef.current!.thinking) {
                   return prev
                 }
-                
+
                 // Create new array only when content has changed
                 if (lastMessage?.role === "assistant") {
                   const newMessages = [...prev]
@@ -641,86 +646,86 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
 
       {/* Backdrop */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside 
+      <aside
         className={`fixed top-0 left-0 h-full w-64 border-r border-border/40 bg-background transition-all duration-300 ease-in-out z-50 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-64'
-        }`}
+          }`}
       >
         <div className="flex flex-col h-full justify-between">
           {/* Top Section */}
           <div className="flex-shrink-0">
             <div className="p-4 border-b border-border/40">
               <div className="flex gap-2">
-              <Button 
-                onClick={createNewChat}
-                className="flex-1"
-              >
-                <PlusCircle className="h-4 w-4 mr-2" />
-                New Chat
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowClearConfirm(true)}
-                className="shrink-0"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-            </div>
-            {/* Chat History - Scrollable Section */}
-            <div className="flex-1 overflow-y-auto p-2 h-[calc(100vh-220px)] sidebar-scroll">
-            {chats.map(chat => (
-              <div
-                key={chat.id}
-                className={`group flex items-center gap-2 p-3 rounded-lg mb-2 hover:bg-muted/50 transition-colors ${
-                  currentChatId === chat.id ? 'bg-muted' : ''
-                }`}
-              >
-                <button
-                  onClick={() => {
-                    setCurrentChatId(chat.id)
-                    setMessages(chat.messages)
-                    // Track chat selection
-                    posthog.capture('chat_selected', {
-                      chat_id: chat.id,
-                      timestamp: new Date().toISOString()
-                    })
-                  }}
-                  className="flex-1 text-left"
-                >
-                  <div className="font-mono text-sm truncate">{chat.title}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {new Date(chat.timestamp).toLocaleString()}
-                  </div>
-                </button>
                 <Button
-                  variant="ghost"
+                  onClick={createNewChat}
+                  className="flex-1"
+                >
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  New Chat
+                </Button>
+                <Button
+                  variant="outline"
                   size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setChatToDelete(chat.id)
-                  }}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => setShowClearConfirm(true)}
+                  className="shrink-0"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
-            ))}
+            </div>
+            {/* Chat History - Scrollable Section */}
+            <div className="flex-1 overflow-y-auto p-2 h-[calc(100vh-220px)] sidebar-scroll">
+              {chats.map(chat => (
+                <div
+                  key={chat.id}
+                className={`group flex items-center gap-2 p-3 rounded-lg mb-2 hover:bg-muted/50 transition-colors ${
+                  currentChatId === chat.id ? 'bg-muted' : ''
+                    }`}
+                >
+                  <button
+                    onClick={() => {
+                      setCurrentChatId(chat.id)
+                      setMessages(chat.messages)
+                      // Track chat selection
+                      posthog.capture('chat_selected', {
+                        chat_id: chat.id,
+                        timestamp: new Date().toISOString()
+                      })
+                    }}
+                    className="flex-1 text-left"
+                  >
+                    <div className="font-mono text-sm truncate">{chat.title}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {new Date(chat.timestamp).toLocaleString()}
+                    </div>
+                  </button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setChatToDelete(chat.id)
+                    }}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
             </div>
           </div>
-          
+
           {/* Bottom Section */}
           {/* Bottom Section */}
           <div className="flex-shrink-0 p-4 pb-8 border-t border-border/40 space-y-4">
-            <a 
+            <a
               href="https://github.com/getAsterisk/deepclaude/issues/new"
               target="_blank"
               rel="noopener noreferrer"
@@ -730,18 +735,18 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
                 })
               }}
             >
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full"
               >
                 <Github className="h-4 w-4 mr-2" />
                 File a bug on GitHub
               </Button>
             </a>
-            
+
             <div className="flex items-center justify-center text-sm text-muted-foreground whitespace-nowrap">
               <span className="flex-shrink-0 mr-1">An</span>
-              <a 
+              <a
                 href="https://asterisk.so/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -775,20 +780,20 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
         }}
         className={`fixed top-4 z-50 p-2 bg-muted/30 hover:bg-muted/50 rounded-lg transition-all duration-300 ease-in-out ${
           isSidebarOpen ? 'left-[268px]' : 'left-4'
-        }`}
+          }`}
       >
-        <ChevronRight 
+        <ChevronRight
           className={`h-4 w-4 transition-transform duration-300 ${
             isSidebarOpen ? 'rotate-180' : ''
-          }`} 
+            }`}
         />
       </button>
 
       {/* Main Chat Area */}
-      <main 
+      <main
         className={`flex-1 transition-[margin] duration-300 ease-in-out ${
           isSidebarOpen ? 'ml-64' : 'ml-0'
-        }`}
+          }`}
       >
         <div className="container max-w-4xl mx-auto px-4 flex flex-col h-screen">
           <header className="sticky top-0 py-4 px-2 bg-background/80 backdrop-blur z-40 border-b border-border/40">
@@ -805,10 +810,10 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {[
-                    "claude-3-sonnet-20241022",
-                    "claude-3-sonnet-latest", 
-                    "claude-3-haiku-20241022",
-                    "claude-3-haiku-latest",
+                    "claude-3-5-sonnet-20241022",
+                    "claude-3-5-sonnet-latest",
+                    "claude-3-5-haiku-20241022",
+                    "claude-3-5-haiku-latest",
                     "claude-3-opus-20240229",
                     "claude-3-opus-latest"
                   ].map((model) => (
@@ -828,45 +833,45 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
               </Button>
             </div>
           </header>
-          <div 
-            ref={parentRef} 
+          <div
+            ref={parentRef}
             className="flex-1 w-full overflow-y-auto px-2"
             id="chat-container"
           >
-            <div 
+            <div
               className="relative mx-auto min-h-full py-4"
-              style={{ 
+              style={{
                 height: messages.length > 0 ? `${rowVirtualizer.getTotalSize()}px` : '100%',
                 minHeight: '100%'
               }}
             >
-            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-              const message = messages[virtualRow.index]
-              const index = virtualRow.index
-              return (
-                <div
-                  key={virtualRow.index}
-                  data-index={virtualRow.index}
-                  ref={rowVirtualizer.measureElement}
-                  className="absolute left-0 w-full virtual-item-transition"
-                  style={{
-                    transform: `translate3d(0, ${virtualRow.start}px, 0)`
-                  }}
-                >
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const message = messages[virtualRow.index]
+                const index = virtualRow.index
+                return (
                   <div
-                    className={`py-4 message-transition ${message.role === "assistant" ? "border-b border-border/40" : ""}`}
-                    data-loaded="true"
+                    key={virtualRow.index}
+                    data-index={virtualRow.index}
+                    ref={rowVirtualizer.measureElement}
+                    className="absolute left-0 w-full virtual-item-transition"
+                    style={{
+                      transform: `translate3d(0, ${virtualRow.start}px, 0)`
+                    }}
                   >
-                    <div className="max-w-4xl mx-auto space-y-3 px-4">
-                      <div className="font-medium text-sm text-muted-foreground message-content">
-                        {message.role === "user" ? "You" : "Assistant"}
+                    <div
+                      className={`py-4 message-transition ${message.role === "assistant" ? "border-b border-border/40" : ""}`}
+                      data-loaded="true"
+                    >
+                      <div className="max-w-4xl mx-auto space-y-3 px-4">
+                        <div className="font-medium text-sm text-muted-foreground message-content">
+                          {message.role === "user" ? "You" : "Assistant"}
+                        </div>
+                        <MessageContent message={message} index={index} />
                       </div>
-                      <MessageContent message={message} index={index} />
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
             </div>
           </div>
           <div className="sticky bottom-0 bg-background/80 backdrop-blur border-t border-border/40 w-full">
