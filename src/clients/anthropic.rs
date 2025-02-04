@@ -264,6 +264,7 @@ impl AnthropicClient {
         // Create base request with required fields
         let default_model = serde_json::json!(DEFAULT_MODEL);
         let model_value = config.body.get("model").unwrap_or(&default_model);
+        
         let default_max_tokens = if let Some(model_str) = model_value.as_str() {
             if model_str.contains("claude-3-opus") {
                 4096

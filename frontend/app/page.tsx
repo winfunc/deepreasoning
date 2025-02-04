@@ -308,32 +308,6 @@ export default function LandingPage() {
                 </Collapsible>
               </Card>
 
-              {/* How good is it? */}
-              <Card className="p-6 bg-card/50 backdrop-blur border-muted hover:border-primary/50 transition-colors">
-                <Collapsible>
-                  <CollapsibleTrigger className="w-full">
-                    <div className="flex items-center justify-between text-left">
-                      <h3 className="text-xl font-semibold">How good is it?</h3>
-                      <ChevronDown className="h-5 w-5 transform transition-transform duration-200" />
-                    </div>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="pt-4 text-left">
-                    <p className="mb-6 text-muted-foreground">
-                      "R1 as architect with Sonnet as editor has set a new SOTA of 64.0% on the aider polyglot benchmark. They achieve this at 14X less cost compared to the previous o1 SOTA result." - <a href="https://aider.chat/2025/01/24/r1-sonnet.html" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors">Aider Polyglot Benchmarks</a>.
-                    </p>
-                    <div className="rounded-lg overflow-hidden">
-                      <Image
-                        src="/r1-plus-sonnet-benchmarks.png"
-                        alt="R1 + Sonnet Benchmarks"
-                        width={800}
-                        height={400}
-                        className="w-full"
-                      />
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </Card>
-
               {/* Is it free? */}
               <Card className="p-6 bg-card/50 backdrop-blur border-muted hover:border-primary/50 transition-colors">
                 <Collapsible>

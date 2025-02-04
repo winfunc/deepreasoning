@@ -23,7 +23,6 @@ Harness the power of DeepSeek R1's reasoning and Claude's creativity and code ge
 - [Overview](#overview)
 - [Features](#features)
 - [Why R1 + Claude?](#why-r1--claude)
-- [Benchmarks](#benchmarks)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -66,16 +65,6 @@ However, R1 lacks in code generation, creativity, and conversational skills. Cla
 - Claude's superior code generation and creativity
 - Fast streaming responses in a single API call
 - Complete control with your own API keys
-
-## Benchmarks
-
-![Benchmarks](frontend/public/r1-plus-sonnet-benchmarks.png)
-
-According to [Aider Polyglot Benchmarks](https://aider.chat/2025/01/24/r1-sonnet.html), the combination of "R1 as architect with Sonnet as editor" has achieved:
-
-- New SOTA of 64.0% on the aider polyglot benchmark
-- 14X cost reduction compared to previous SOTA results
-- Improved accuracy across multiple programming languages
 
 ## Getting Started
 
