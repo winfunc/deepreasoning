@@ -14,16 +14,16 @@ use std::collections::HashMap;
 pub struct ApiRequest {
     #[serde(default)]
     pub stream: bool,
-    
+
     #[serde(default)]
     pub verbose: bool,
-    
+
     pub system: Option<String>,
     pub messages: Vec<Message>,
-    
+
     #[serde(default)]
     pub deepseek_config: ApiConfig,
-    
+
     #[serde(default)]
     pub anthropic_config: ApiConfig,
 }
@@ -58,7 +58,7 @@ pub enum Role {
 pub struct ApiConfig {
     #[serde(default)]
     pub headers: HashMap<String, String>,
-    
+
     #[serde(default)]
     pub body: serde_json::Value,
 }
@@ -73,8 +73,11 @@ impl ApiRequest {
     ///
     /// * `bool` - True if system prompt validation passes (no duplicates), false otherwise
     pub fn validate_system_prompt(&self) -> bool {
-        let system_in_messages = self.messages.iter().any(|msg| matches!(msg.role, Role::System));
-        
+        let system_in_messages = self
+            .messages
+            .iter()
+            .any(|msg| matches!(msg.role, Role::System));
+
         // Only invalid if system prompt is provided in both places
         !(self.system.is_some() && system_in_messages)
     }
@@ -91,15 +94,20 @@ impl ApiRequest {
         let mut messages = Vec::new();
 
         // Add system message first
-        if let Some(system) = &self.system {
+        if let Some(system) = &self.get_system_prompt() {
             messages.push(Message {
                 role: Role::System,
-                content: system.clone(),
+                content: system.to_string(),
             });
         }
 
         // Add remaining messages
-        messages.extend(self.messages.iter().filter(|msg| !matches!(msg.role, Role::System)).cloned());
+        messages.extend(
+            self.messages
+                .iter()
+                .filter(|msg| !matches!(msg.role, Role::System))
+                .cloned(),
+        );
 
         messages
     }
