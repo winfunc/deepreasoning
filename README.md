@@ -4,7 +4,7 @@
 
 <img src="frontend/public/deepclaude.png" width="300">
 
-Harness the power of DeepSeek R1's reasoning and Claude's creativity and code generation capabilities with a unified API and chat interface.
+通过统一的API和聊天界面，利用DeepSeek R1的推理能力以及Claude的创造力和代码生成能力。
 
 [![GitHub license](https://img.shields.io/github/license/getasterisk/deepclaude)](https://github.com/getasterisk/deepclaude/blob/main/LICENSE.md)
 [![Rust](https://img.shields.io/badge/rust-v1.75%2B-orange)](https://www.rust-lang.org/)
@@ -19,52 +19,22 @@ Harness the power of DeepSeek R1's reasoning and Claude's creativity and code ge
 
 </div>
 
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Why R1 + Claude?](#why-r1--claude)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-- [API Usage](#api-usage)
-  - [Basic Example](#basic-example)
-  - [Streaming Example](#streaming-example)
-- [Configuration Options](#configuration-options)
-- [Self-Hosting](#self-hosting)
-- [Security](#security)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
 
-## Overview
 
-DeepClaude is a high-performance LLM inference API that combines DeepSeek R1's Chain of Thought (CoT) reasoning capabilities with Anthropic Claude's creative and code generation prowess. It provides a unified interface for leveraging the strengths of both models while maintaining complete control over your API keys and data.
+## 介绍
 
-## Features
+DeepClaude是一款高性能的LLM推理API，它将DeepSeek R1的思想链（CoT）推理能力与Anthropic Claude的创造力和代码生成能力相结合。它提供了一个统一的接口，用于利用两种模型的优势，同时保持对API密钥和数据的完全控制。
 
-🚀 **Zero Latency** - Instant responses with R1's CoT followed by Claude's response in a single stream, powered by a high-performance Rust API
+## 为什么 R1 + Claude?
 
-🔒 **Private & Secure** - End-to-end security with local API key management. Your data stays private
+DeepSeek R1的CoT轨迹展示了LLM经历“元认知”的深度推理——自我纠正、思考边缘情况，以及用自然语言进行准蒙特卡洛树搜索。
 
-⚙️ **Highly Configurable** - Customize every aspect of the API and interface to match your needs
+然而，R1缺乏代码生成、创造力和会话技能。克劳德3.5十四行诗在这些方面表现出色，使其成为完美的补充。DeepClaude结合了这两种模型，提供：
 
-🌟 **Open Source** - Free and open-source codebase. Contribute, modify, and deploy as you wish
-
-🤖 **Dual AI Power** - Combine DeepSeek R1's reasoning with Claude's creativity and code generation
-
-🔑 **Managed BYOK API** - Use your own API keys with our managed infrastructure for complete control
-
-## Why R1 + Claude?
-
-DeepSeek R1's CoT trace demonstrates deep reasoning to the point of an LLM experiencing "metacognition" - correcting itself, thinking about edge cases, and performing quasi Monte Carlo Tree Search in natural language.
-
-However, R1 lacks in code generation, creativity, and conversational skills. Claude 3.5 Sonnet excels in these areas, making it the perfect complement. DeepClaude combines both models to provide:
-
-- R1's exceptional reasoning and problem-solving capabilities
-- Claude's superior code generation and creativity
-- Fast streaming responses in a single API call
-- Complete control with your own API keys
+-R1出色的推理和解决问题的能力
+-Claude卓越的代码生成能力和创造力
+-单个API调用中的快速流式响应
+-使用您自己的API密钥完成控制
 
 ## Getting Started
 
