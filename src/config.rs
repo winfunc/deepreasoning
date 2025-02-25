@@ -25,6 +25,10 @@ pub struct Config {
 pub struct ServerConfig {
     pub host: String,
     pub port: u16,
+    pub anthropic_base_url: String,
+    pub deepseek_base_url: String,
+    pub anthropic_model_id: String,
+    pub deepseek_model_id: String,
 }
 
 /// Pricing configuration for all supported AI models.
@@ -107,6 +111,10 @@ impl Default for Config {
             server: ServerConfig {
                 host: "127.0.0.1".to_string(),
                 port: 3000,
+                anthropic_base_url: "https://api.anthropic.com".to_string(),
+                deepseek_base_url: "https://api.deepseek.com".to_string(),
+                anthropic_model_id: "claude-3-5-sonnet-20241022".to_string(),
+                deepseek_model_id: "deepseek-reasoner".to_string(),
             },
             pricing: PricingConfig {
                 deepseek: DeepSeekPricing {

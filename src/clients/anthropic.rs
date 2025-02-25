@@ -47,8 +47,7 @@ use std::{collections::HashMap, pin::Pin};
 use futures::StreamExt;
 use serde_json;
 
-pub(crate) const ANTHROPIC_API_URL: &str = "https://api.anthropic.com/v1/messages";
-const DEFAULT_MODEL: &str = "claude-3-5-sonnet-20241022";
+use crate::config::Config;
 
 /// Client for interacting with Anthropic's Claude models.
 ///
@@ -66,6 +65,8 @@ const DEFAULT_MODEL: &str = "claude-3-5-sonnet-20241022";
 pub struct AnthropicClient {
     pub(crate) client: Client,
     api_token: String,
+    base_url: String,
+    model_id: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -174,9 +175,14 @@ impl AnthropicClient {
     ///
     /// A new `AnthropicClient` instance configured with the provided API token
     pub fn new(api_token: String) -> Self {
+        let config = Config::load().unwrap_or_default();
+        let base_url = format!("{}/v1/messages", config.server.anthropic_base_url.trim_end_matches('/'));
+
         Self {
             client: Client::new(),
             api_token,
+            base_url,
+            model_id: config.server.anthropic_model_id,
         }
     }
 
@@ -262,7 +268,7 @@ impl AnthropicClient {
             .collect();
 
         // Create base request with required fields
-        let default_model = serde_json::json!(DEFAULT_MODEL);
+        let default_model = serde_json::json!(&self.model_id);
         let model_value = config.body.get("model").unwrap_or(&default_model);
         
         let default_max_tokens = if let Some(model_str) = model_value.as_str() {
@@ -345,7 +351,7 @@ impl AnthropicClient {
 
         let response = self
             .client
-            .post(ANTHROPIC_API_URL)
+            .post(&self.base_url)
             .headers(headers)
             .json(&request)
             .send()
@@ -406,7 +412,7 @@ impl AnthropicClient {
         messages: Vec<Message>,
         system: Option<String>,
         config: &ApiConfig,
-    ) -> Pin<Box<dyn Stream<Item = Result<StreamEvent>> + Send>> {
+    ) -> Pin<Box<dyn Stream<Item = Result<StreamEvent>> + Send + '_>> {
         let headers = match self.build_headers(Some(&config.headers)) {
             Ok(h) => h,
             Err(e) => return Box::pin(futures::stream::once(async move { Err(e) })),
@@ -417,7 +423,7 @@ impl AnthropicClient {
 
         Box::pin(async_stream::try_stream! {
             let mut stream = client
-                .post(ANTHROPIC_API_URL)
+                .post(&self.base_url)
                 .headers(headers)
                 .json(&request)
                 .send()
