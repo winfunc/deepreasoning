@@ -97,7 +97,7 @@ host = "127.0.0.1"
 port = 3000
 anthropic_base_url = "https://api.anthropic.com"
 deepseek_base_url = "https://api.deepseek.com"
-anthropic_model_id = "claude-3-5-sonnet-20241022"
+anthropic_model_id = "claude-3-7-sonnet-20250219"
 deepseek_model_id = "deepseek-reasoner"
 
 [pricing]
