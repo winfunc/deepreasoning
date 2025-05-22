@@ -65,8 +65,7 @@ use std::{collections::HashMap, pin::Pin};
 use futures::StreamExt;
 use serde_json;
 
-pub(crate) const DEEPSEEK_API_URL: &str = "https://api.deepseek.com/chat/completions";
-const DEFAULT_MODEL: &str = "deepseek-reasoner";
+use crate::config::Config;
 
 /// Client for interacting with DeepSeek's AI models.
 ///
@@ -84,6 +83,8 @@ const DEFAULT_MODEL: &str = "deepseek-reasoner";
 pub struct DeepSeekClient {
     pub(crate) client: Client,
     api_token: String,
+    base_url: String,
+    model_id: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -170,9 +171,14 @@ pub(crate) struct DeepSeekRequest {
 
 impl DeepSeekClient {
     pub fn new(api_token: String) -> Self {
+        let config = Config::load().unwrap_or_default();
+        let base_url = format!("{}/chat/completions", config.server.deepseek_base_url.trim_end_matches('/'));
+
         Self {
             client: Client::new(),
             api_token,
+            base_url,
+            model_id: config.server.deepseek_model_id,
         }
     }
 
@@ -242,7 +248,7 @@ impl DeepSeekClient {
             "messages": messages,
             "stream": stream,
             // Set defaults only if not provided in config
-            "model": config.body.get("model").unwrap_or(&serde_json::json!(DEFAULT_MODEL)),
+            "model": config.body.get("model").unwrap_or(&serde_json::json!(&self.model_id)),
             "max_tokens": config.body.get("max_tokens").unwrap_or(&serde_json::json!(8192)),
             "temperature": config.body.get("temperature").unwrap_or(&serde_json::json!(1.0)),
             "response_format": {
@@ -300,7 +306,7 @@ impl DeepSeekClient {
 
         let response = self
             .client
-            .post(DEEPSEEK_API_URL)
+            .post(&self.base_url)
             .headers(headers)
             .json(&request)
             .send()
@@ -359,7 +365,7 @@ impl DeepSeekClient {
         &self,
         messages: Vec<Message>,
         config: &ApiConfig,
-    ) -> Pin<Box<dyn Stream<Item = Result<StreamResponse>> + Send>> {
+    ) -> Pin<Box<dyn Stream<Item = Result<StreamResponse>> + Send + '_>> {
         let headers = match self.build_headers(Some(&config.headers)) {
             Ok(h) => h,
             Err(e) => return Box::pin(futures::stream::once(async move { Err(e) })),
@@ -370,7 +376,7 @@ impl DeepSeekClient {
 
         Box::pin(async_stream::try_stream! {
             let mut stream = client
-                .post(DEEPSEEK_API_URL)
+                .post(&self.base_url)
                 .headers(headers)
                 .json(&request)
                 .send()

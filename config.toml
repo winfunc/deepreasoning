@@ -2,6 +2,10 @@
 [server]
 host = "127.0.0.1"
 port = 1337
+anthropic_base_url = "https://api.anthropic.com"
+deepseek_base_url = "https://api.deepseek.com"
+anthropic_model_id = "claude-3-7-sonnet-20250219"
+deepseek_model_id = "deepseek-reasoner"
 
 # Pricing Configuration (per million tokens)
 [pricing]
