@@ -76,7 +76,7 @@ const DEFAULT_MODEL: &str = "deepseek-reasoner";
 /// # Examples
 ///
 /// ```no_run
-/// use deepclaude::clients::DeepSeekClient;
+/// use deepreasoning::clients::DeepSeekClient;
 ///
 /// let client = DeepSeekClient::new("api_token".to_string());
 /// ```

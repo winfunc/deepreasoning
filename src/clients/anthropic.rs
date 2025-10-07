@@ -19,8 +19,8 @@
 //! # Example Usage
 //!
 //! ```no_run
-//! use deepclaude::clients::AnthropicClient;
-//! use deepclaude::models::{Message, ApiConfig};
+//! use deepreasoning::clients::AnthropicClient;
+//! use deepreasoning::models::{Message, ApiConfig};
 //!
 //! async fn example() -> Result<(), Box<dyn std::error::Error>> {
 //!     let client = AnthropicClient::new("your-api-key".to_string());
@@ -58,7 +58,7 @@ const DEFAULT_MODEL: &str = "claude-3-5-sonnet-20241022";
 /// # Examples
 ///
 /// ```no_run
-/// use deepclaude::clients::AnthropicClient;
+/// use deepreasoning::clients::AnthropicClient;
 ///
 /// let client = AnthropicClient::new("api_token".to_string());
 /// ```

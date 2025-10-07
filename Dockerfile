@@ -1,7 +1,7 @@
 # Builder stage
 FROM rust:latest as builder
 
-WORKDIR /usr/src/deepclaude
+WORKDIR /usr/src/deepreasoning
 COPY . .
 
 # Install build dependencies
@@ -23,15 +23,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the built binary
-COPY --from=builder /usr/src/deepclaude/target/release/deepclaude .
-COPY --from=builder /usr/src/deepclaude/config.toml .
+COPY --from=builder /usr/src/deepreasoning/target/release/deepreasoning .
+COPY --from=builder /usr/src/deepreasoning/config.toml .
 
 # Set the host and port in config
-ENV DEEPCLAUDE_HOST=0.0.0.0
-ENV DEEPCLAUDE_PORT=1337
+ENV DEEPREASONING_HOST=0.0.0.0
+ENV DEEPREASONING_PORT=1337
 
 # Expose port 1337
 EXPOSE 1337
 
 # Run the binary
-CMD ["./deepclaude"]
+CMD ["./deepreasoning"]

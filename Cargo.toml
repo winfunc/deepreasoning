@@ -1,5 +1,5 @@
 [package]
-name = "deepclaude"
+name = "deepreasoning"
 version = "0.1.0"
 edition = "2021"
 description = "A high-performance LLM inference API and Chat UI that integrates DeepSeek R1's CoT reasoning traces with Anthropic Claude models."

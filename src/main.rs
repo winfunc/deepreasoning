@@ -1,4 +1,4 @@
-//! DeepClaude - A high-performance LLM inference API and Chat UI that integrates DeepSeek R1's CoT reasoning traces with Anthropic Claude models..
+//! DeepReasoning - A high-performance LLM inference API and Chat UI that integrates DeepSeek R1's CoT reasoning traces with Anthropic Claude models..
 //!
 //! This application provides a REST API for chat interactions that:
 //! - Processes messages through DeepSeek R1 for reasoning
@@ -46,7 +46,7 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "deepclaude=debug,tower_http=debug".into()),
+                .unwrap_or_else(|_| "deepreasoning=debug,tower_http=debug".into()),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
