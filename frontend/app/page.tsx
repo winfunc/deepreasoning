@@ -59,8 +59,8 @@ export default function LandingPage() {
         <div className="relative space-y-8 text-center max-w-[600px]">
           <div className="animate-float">
             <Image
-              src="/deepclaude.png"
-              alt="DeepClaude Logo"
+              src="/deepreasoning.png"
+              alt="DeepReasoning Logo"
               width={200}
               height={200}
               className="mx-auto"
@@ -69,7 +69,7 @@ export default function LandingPage() {
           </div>
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
-            DeepClaude
+            DeepReasoning
           </h1>
           
           <p className="max-w-[600px] text-lg sm:text-xl text-muted-foreground">
@@ -85,7 +85,7 @@ export default function LandingPage() {
               })
             }}>
               <Button size="lg" className="group">
-                Try DeepClaude Chat
+                Try DeepReasoning Chat
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
@@ -102,7 +102,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <a 
-              href="https://github.com/getasterisk/deepclaude" 
+              href="https://github.com/getasterisk/deepreasoning" 
               target="_blank" 
               rel="noopener noreferrer"
               onClick={() => {
@@ -299,10 +299,10 @@ export default function LandingPage() {
                       DeepSeek R1's CoT trace demonstrates deep reasoning to the point of an LLM experiencing "metacognition" - correcting itself, thinking about edge cases, and so on. It's a quasi MCTS in natural language.
                     </p>
                     <p className="mb-4">
-                      But R1 lacks at code generation, creativity, and conversational skills. The model that excels at all 3 is the Claude 3.5 Sonnet New from Anthropic. So how about we combine both of them? And take the best of both worlds? Enter DeepClaude!
+                      But R1 lacks at code generation, creativity, and conversational skills. The model that excels at all 3 is the Claude 3.5 Sonnet New from Anthropic. So how about we combine both of them? And take the best of both worlds? Enter DeepReasoning!
                     </p>
                     <p>
-                      With DeepClaude, you get a fast streaming R1 CoT + Claude Models in a single API call with your own API keys.
+                      With DeepReasoning, you get a fast streaming R1 CoT + Claude Models in a single API call with your own API keys.
                     </p>
                   </CollapsibleContent>
                 </Collapsible>
@@ -354,7 +354,7 @@ export default function LandingPage() {
                 })
               }}>
                 <Button size="lg" className="group">
-                  Try DeepClaude Chat
+                  Try DeepReasoning Chat
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>

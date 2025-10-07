@@ -8,9 +8,9 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "DeepClaude",
+  title: "DeepReasoning",
   icons: {
-    icon: "/deepclaude.ico"
+    icon: "/deepreasoning.ico"
   },
 }
 

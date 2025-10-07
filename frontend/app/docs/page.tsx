@@ -26,7 +26,7 @@ import { CopyButton } from "../../components/ui/copy-button"
 // Example cURL commands and responses
 const examples = {
   nonStreaming: {
-    curl: `curl -L -X POST 'https://api.deepclaude.com'
+    curl: `curl -L -X POST 'https://api.deepreasoning.com'
 -H 'Content-Type: application/json'
 -H 'Accept: application/json'
 -H 'X-DeepSeek-API-Token: <YOUR_DEEPSEEK_API_TOKEN>'
@@ -91,7 +91,7 @@ const examples = {
 }`
   },
   streaming: {
-    curl: `curl -L -X POST 'https://api.deepclaude.com'
+    curl: `curl -L -X POST 'https://api.deepreasoning.com'
 -H 'Content-Type: application/json'
 -H 'Accept: application/json'
 -H 'X-DeepSeek-API-Token: <YOUR_DEEPSEEK_API_TOKEN>'
@@ -302,7 +302,7 @@ event: done
 data: {"type":"done"}`
   },
   verbose: {
-    curl: `curl -L -X POST 'https://api.deepclaude.com'
+    curl: `curl -L -X POST 'https://api.deepreasoning.com'
 -H 'Content-Type: application/json'
 -H 'Accept: application/json'
 -H 'X-DeepSeek-API-Token: <YOUR_DEEPSEEK_API_TOKEN>'
@@ -514,8 +514,8 @@ export default function DocsPage() {
         <div className="relative space-y-8 text-center max-w-4xl mx-auto">
           <div className="animate-float">
             <Image
-              src="/deepclaude.png"
-              alt="DeepClaude Logo"
+              src="/deepreasoning.png"
+              alt="DeepReasoning Logo"
               width={120}
               height={120}
               className="mx-auto"
@@ -524,11 +524,11 @@ export default function DocsPage() {
           </div>
           
           <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
-            DeepClaude API Documentation
+            DeepReasoning API Documentation
           </h1>
-          
+
           <p className="text-lg sm:text-xl text-muted-foreground max-w-[600px] mx-auto">
-            Integrate DeepClaude's powerful AI capabilities into your applications with a simple and flexible unified API.
+            Integrate DeepReasoning's powerful AI capabilities into your applications with a simple and flexible unified API.
           </p>
         </div>
       </section>
@@ -553,7 +553,7 @@ export default function DocsPage() {
                   Use our managed API endpoint for the quickest setup:
                 </p>
                 <div className="font-mono text-lg text-primary">
-                  https://api.deepclaude.com/
+                  https://api.deepreasoning.com/
                 </div>
               </div>
               <div className="space-y-4">

@@ -47,7 +47,7 @@ export function Settings({ onSettingsChange }: SettingsProps) {
 
   // Load settings from localStorage on mount
   useEffect(() => {
-    const savedSettings = localStorage.getItem('deepclaude-settings')
+    const savedSettings = localStorage.getItem('deepreasoning-settings')
     if (savedSettings) {
       const settings = JSON.parse(savedSettings)
       form.reset(settings)
@@ -60,7 +60,7 @@ export function Settings({ onSettingsChange }: SettingsProps) {
 
   // Debounced save function
   const debouncedSave = useCallback((data: SettingsFormValues) => {
-    localStorage.setItem('deepclaude-settings', JSON.stringify(data))
+    localStorage.setItem('deepreasoning-settings', JSON.stringify(data))
     onSettingsChange({
       deepseekApiToken: data.deepseekApiToken,
       anthropicApiToken: data.anthropicApiToken
@@ -113,7 +113,7 @@ export function Settings({ onSettingsChange }: SettingsProps) {
       anthropicHeaders: [{ key: "anthropic-version", value: "2023-06-01" }],
       anthropicBody: []
     })
-    localStorage.removeItem('deepclaude-settings')
+    localStorage.removeItem('deepreasoning-settings')
     onSettingsChange({
       deepseekApiToken: "",
       anthropicApiToken: ""
@@ -224,7 +224,7 @@ export function Settings({ onSettingsChange }: SettingsProps) {
                 size="sm"
                 onClick={() => {
                   const data = form.getValues()
-                  localStorage.setItem('deepclaude-settings', JSON.stringify(data))
+                  localStorage.setItem('deepreasoning-settings', JSON.stringify(data))
                   onSettingsChange({
                     deepseekApiToken: data.deepseekApiToken,
                     anthropicApiToken: data.anthropicApiToken

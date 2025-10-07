@@ -92,7 +92,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
 
   // Load chats from localStorage on mount and create new chat
   useEffect(() => {
-    const storedChats = localStorage.getItem('deepclaude-chats')
+    const storedChats = localStorage.getItem('deepreasoning-chats')
     if (storedChats) {
       const parsedChats = JSON.parse(storedChats)
       setChats(parsedChats)
@@ -104,7 +104,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
   // Save chats to localStorage whenever they change
   useEffect(() => {
     if (chats.length > 0) {
-      localStorage.setItem('deepclaude-chats', JSON.stringify(chats))
+      localStorage.setItem('deepreasoning-chats', JSON.stringify(chats))
     }
   }, [chats])
 
@@ -136,7 +136,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
     setChats([])
     setCurrentChatId(null)
     setMessages([])
-    localStorage.removeItem('deepclaude-chats')
+    localStorage.removeItem('deepreasoning-chats')
     setShowClearConfirm(false)
   }
 
@@ -468,7 +468,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
         }
       }
 
-      const response = await fetch("https://api.deepclaude.com", {
+      const response = await fetch("https://api.deepreasoning.com", {
         method: "POST",
         signal: controller.signal,
         headers: {
@@ -726,7 +726,7 @@ export function Chat({ selectedModel, onModelChange, apiTokens }: ChatProps) {
           {/* Bottom Section */}
           <div className="flex-shrink-0 p-4 pb-8 border-t border-border/40 space-y-4">
             <a
-              href="https://github.com/getAsterisk/deepclaude/issues/new"
+              href="https://github.com/getAsterisk/deepreasoning/issues/new"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {
