@@ -1,14 +1,14 @@
 <div align="center">
 
-<h1>DeepClaude 🐬🧠</h1>
+<h1>DeepReasoning 🐬🧠</h1>
 
-<img src="frontend/public/deepclaude.png" width="300">
+<img src="frontend/public/deepreasoning.png" width="300">
 
 Harness the power of DeepSeek R1's reasoning and Claude's creativity and code generation capabilities with a unified API and chat interface.
 
-[![GitHub license](https://img.shields.io/github/license/getasterisk/deepclaude)](https://github.com/getasterisk/deepclaude/blob/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/getasterisk/deepreasoning)](https://github.com/getasterisk/deepreasoning/blob/main/LICENSE.md)
 [![Rust](https://img.shields.io/badge/rust-v1.75%2B-orange)](https://www.rust-lang.org/)
-[![API Status](https://img.shields.io/badge/API-Stable-green)](https://deepclaude.asterisk.so)
+[![API Status](https://img.shields.io/badge/API-Stable-green)](https://deepreasoning.asterisk.so)
 
 [Getting Started](#getting-started) •
 [Features](#features) •
@@ -16,6 +16,11 @@ Harness the power of DeepSeek R1's reasoning and Claude's creativity and code ge
 [Documentation](#documentation) •
 [Self-Hosting](#self-hosting) •
 [Contributing](#contributing)
+
+---
+
+> [!NOTE]
+> **Disclaimer:** This project is not affiliated with, endorsed by, or sponsored by Anthropic. Claude is a trademark of Anthropic, PBC. This is an independent developer project using Claude.
 
 </div>
 
@@ -39,7 +44,7 @@ Harness the power of DeepSeek R1's reasoning and Claude's creativity and code ge
 
 ## Overview
 
-DeepClaude is a high-performance LLM inference API that combines DeepSeek R1's Chain of Thought (CoT) reasoning capabilities with Anthropic Claude's creative and code generation prowess. It provides a unified interface for leveraging the strengths of both models while maintaining complete control over your API keys and data.
+DeepReasoning is a high-performance LLM inference API that combines DeepSeek R1's Chain of Thought (CoT) reasoning capabilities with Anthropic Claude's creative and code generation prowess. It provides a unified interface for leveraging the strengths of both models while maintaining complete control over your API keys and data.
 
 ## Features
 
@@ -59,7 +64,7 @@ DeepClaude is a high-performance LLM inference API that combines DeepSeek R1's C
 
 DeepSeek R1's CoT trace demonstrates deep reasoning to the point of an LLM experiencing "metacognition" - correcting itself, thinking about edge cases, and performing quasi Monte Carlo Tree Search in natural language.
 
-However, R1 lacks in code generation, creativity, and conversational skills. Claude 3.5 Sonnet excels in these areas, making it the perfect complement. DeepClaude combines both models to provide:
+However, R1 lacks in code generation, creativity, and conversational skills. Claude 3.5 Sonnet excels in these areas, making it the perfect complement. DeepReasoning combines both models to provide:
 
 - R1's exceptional reasoning and problem-solving capabilities
 - Claude's superior code generation and creativity
@@ -78,8 +83,8 @@ However, R1 lacks in code generation, creativity, and conversational skills. Cla
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/getasterisk/deepclaude.git
-cd deepclaude
+git clone https://github.com/getasterisk/deepreasoning.git
+cd deepreasoning
 ```
 
 2. Build the project:
@@ -102,7 +107,7 @@ port = 3000
 
 ## API Usage
 
-See [API Docs](https://deepclaude.chat)
+See [API Docs](https://deepreasoning.chat)
 
 ### Basic Example
 
@@ -190,7 +195,7 @@ The API supports extensive configuration through the request body:
 
 ## Self-Hosting
 
-DeepClaude can be self-hosted on your own infrastructure. Follow these steps:
+DeepReasoning can be self-hosted on your own infrastructure. Follow these steps:
 
 1. Configure environment variables or `config.toml`
 2. Build the Docker image or compile from source
@@ -217,7 +222,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 
 ## Acknowledgments
 
-DeepClaude is a free and open-source project by [Asterisk](https://asterisk.so/). Special thanks to:
+DeepReasoning is a free and open-source project by [Asterisk](https://asterisk.so/). Special thanks to:
 
 - DeepSeek for their incredible R1 model
 - Anthropic for Claude's capabilities

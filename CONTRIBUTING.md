@@ -1,12 +1,12 @@
 # Welcome Contributors
 
-We welcome contributions to enhance DeepClaude's capabilities and improve its performance. To report bugs, create a [GitHub issue](https://github.com/getasterisk/deepclaude/issues).
+We welcome contributions to enhance DeepReasoning's capabilities and improve its performance. To report bugs, create a [GitHub issue](https://github.com/getasterisk/deepreasoning/issues).
 
 > Before contributing, read through the existing issues and pull requests to see if someone else is already working on something similar. That way you can avoid duplicating efforts.
 
 To contribute, please follow these steps:
 
-1. Fork the DeepClaude repository on GitHub.
+1. Fork the DeepReasoning repository on GitHub.
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and ensure that the code passes all tests.
 4. Submit a pull request describing your changes and their benefits.
@@ -32,6 +32,6 @@ When submitting a pull request, please follow these guidelines:
 5. if the pull request does not meet the above guidelines, it may be closed without merging.
 
 
-**Note**: Please ensure that you have the latest version of the code before creating a pull request. If you have an existing fork, just sync your fork with the latest version of the DeepClaude repository.
+**Note**: Please ensure that you have the latest version of the code before creating a pull request. If you have an existing fork, just sync your fork with the latest version of the DeepReasoning repository.
 
 Please adhere to the coding conventions, maintain clear documentation, and provide thorough testing for your contributions.
