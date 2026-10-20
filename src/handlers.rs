@@ -30,6 +30,34 @@ use tokio_stream::wrappers::ReceiverStream;
 /// to all request handlers.
 pub struct AppState {
     pub config: Config,
+    pub web_client: crate::web_context::ParallelClient,
+    #[cfg(test)]
+    pub model_endpoints: Option<(String, String)>,
+}
+
+impl AppState {
+    pub fn new(config: Config) -> Result<Self> {
+        Ok(Self {
+            config,
+            web_client: crate::web_context::ParallelClient::new()?,
+            #[cfg(test)]
+            model_endpoints: None,
+        })
+    }
+
+    fn clients(&self, deepseek_token: String, anthropic_token: String) -> (DeepSeekClient, AnthropicClient) {
+        let deepseek = DeepSeekClient::new(deepseek_token);
+        let anthropic = AnthropicClient::new(anthropic_token);
+        #[cfg(test)]
+        if let Some((deepseek_url, anthropic_url)) = &self.model_endpoints {
+            let mut deepseek = deepseek;
+            let mut anthropic = anthropic;
+            deepseek.api_url = deepseek_url.clone();
+            anthropic.api_url = anthropic_url.clone();
+            return (deepseek, anthropic);
+        }
+        (deepseek, anthropic)
+    }
 }
 
 /// Extracts API tokens from request headers.
@@ -210,11 +238,10 @@ pub(crate) async fn chat(
     let (deepseek_token, anthropic_token) = extract_api_tokens(&headers)?;
 
     // Initialize clients
-    let deepseek_client = DeepSeekClient::new(deepseek_token);
-    let anthropic_client = AnthropicClient::new(anthropic_token);
+    let (deepseek_client, anthropic_client) = state.clients(deepseek_token, anthropic_token);
 
     // Get messages with system prompt
-    let messages = request.get_messages_with_system();
+    let messages = state.web_client.prepare_messages(&request, state.config.server.allow_web_context).await?;
 
     // Call DeepSeek API
     let deepseek_response = deepseek_client.chat(messages.clone(), &request.deepseek_config).await?;
@@ -349,11 +376,10 @@ pub(crate) async fn chat_stream(
     let (deepseek_token, anthropic_token) = extract_api_tokens(&headers)?;
 
     // Initialize clients
-    let deepseek_client = DeepSeekClient::new(deepseek_token);
-    let anthropic_client = AnthropicClient::new(anthropic_token);
+    let (deepseek_client, anthropic_client) = state.clients(deepseek_token, anthropic_token);
 
     // Get messages with system prompt
-    let messages = request.get_messages_with_system();
+    let messages = state.web_client.prepare_messages(&request, state.config.server.allow_web_context).await?;
 
     // Create channel for stream events
     let (tx, rx) = tokio::sync::mpsc::channel(100);

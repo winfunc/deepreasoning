@@ -50,6 +50,8 @@ pub struct ErrorDetails {
 /// and internal server errors.
 #[derive(Error, Debug, Clone)]
 pub enum ApiError {
+    #[error("Web context error: {message}")]
+    WebContext { message: String },
     #[error("Invalid request: {message}")]
     BadRequest {
         message: String,
@@ -97,6 +99,13 @@ pub enum ApiError {
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
         let (status, error_response) = match &self {
+            ApiError::WebContext { message } => (
+                StatusCode::BAD_GATEWAY,
+                ErrorResponse { error: ErrorDetails {
+                    message: message.clone(), type_: "web_context_error".to_string(),
+                    param: None, code: None,
+                } },
+            ),
             ApiError::BadRequest { message } => (
                 StatusCode::BAD_REQUEST,
                 ErrorResponse {

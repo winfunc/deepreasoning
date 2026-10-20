@@ -2,6 +2,9 @@
 [server]
 host = "127.0.0.1"
 port = 1337
+# Allow explicit web_context requests to use anonymous Parallel Search MCP.
+# Ordinary chat never sends queries to Parallel. Set false to prohibit retrieval.
+allow_web_context = true
 
 # Pricing Configuration (per million tokens)
 [pricing]

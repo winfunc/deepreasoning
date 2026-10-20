@@ -12,6 +12,10 @@ use std::collections::HashMap;
 /// system prompts, and configuration options for both DeepSeek and Anthropic APIs.
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ApiRequest {
+    /// Explicit web grounding. Omit or use null to keep ordinary chat unchanged.
+    #[serde(default)]
+    pub web_context: Option<crate::web_context::WebContext>,
+
     #[serde(default)]
     pub stream: bool,
     

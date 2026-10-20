@@ -15,6 +15,7 @@ mod config;
 mod error;
 mod handlers;
 mod models;
+mod web_context;
 
 use crate::{config::Config, handlers::AppState};
 use axum::routing::{post, Router};
@@ -60,7 +61,7 @@ async fn main() -> anyhow::Result<()> {
     // Create application state
     // Clone config for AppState
     let config_clone = config.clone();
-    let state = Arc::new(AppState { config: config_clone });
+    let state = Arc::new(AppState::new(config_clone)?);
 
     // Set up CORS
     let cors = CorsLayer::new()

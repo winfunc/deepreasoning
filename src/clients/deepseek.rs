@@ -83,6 +83,7 @@ const DEFAULT_MODEL: &str = "deepseek-reasoner";
 #[derive(Debug)]
 pub struct DeepSeekClient {
     pub(crate) client: Client,
+    pub(crate) api_url: String,
     api_token: String,
 }
 
@@ -172,6 +173,7 @@ impl DeepSeekClient {
     pub fn new(api_token: String) -> Self {
         Self {
             client: Client::new(),
+            api_url: DEEPSEEK_API_URL.to_string(),
             api_token,
         }
     }
@@ -300,7 +302,7 @@ impl DeepSeekClient {
 
         let response = self
             .client
-            .post(DEEPSEEK_API_URL)
+            .post(&self.api_url)
             .headers(headers)
             .json(&request)
             .send()
@@ -367,10 +369,11 @@ impl DeepSeekClient {
 
         let request = self.build_request(messages, true, config);
         let client = self.client.clone();
+        let api_url = self.api_url.clone();
 
         Box::pin(async_stream::try_stream! {
             let mut stream = client
-                .post(DEEPSEEK_API_URL)
+                .post(&api_url)
                 .headers(headers)
                 .json(&request)
                 .send()

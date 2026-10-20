@@ -25,7 +25,12 @@ pub struct Config {
 pub struct ServerConfig {
     pub host: String,
     pub port: u16,
+    /// Permit explicitly requested web grounding through Parallel Search MCP.
+    #[serde(default = "allow_web_context")]
+    pub allow_web_context: bool,
 }
+
+fn allow_web_context() -> bool { true }
 
 /// Pricing configuration for all supported AI models.
 ///
@@ -107,6 +112,7 @@ impl Default for Config {
             server: ServerConfig {
                 host: "127.0.0.1".to_string(),
                 port: 3000,
+                allow_web_context: true,
             },
             pricing: PricingConfig {
                 deepseek: DeepSeekPricing {

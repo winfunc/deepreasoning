@@ -65,6 +65,7 @@ const DEFAULT_MODEL: &str = "claude-3-5-sonnet-20241022";
 #[derive(Debug)]
 pub struct AnthropicClient {
     pub(crate) client: Client,
+    pub(crate) api_url: String,
     api_token: String,
 }
 
@@ -176,6 +177,7 @@ impl AnthropicClient {
     pub fn new(api_token: String) -> Self {
         Self {
             client: Client::new(),
+            api_url: ANTHROPIC_API_URL.to_string(),
             api_token,
         }
     }
@@ -345,7 +347,7 @@ impl AnthropicClient {
 
         let response = self
             .client
-            .post(ANTHROPIC_API_URL)
+            .post(&self.api_url)
             .headers(headers)
             .json(&request)
             .send()
@@ -414,10 +416,11 @@ impl AnthropicClient {
 
         let request = self.build_request(messages, system, true, config);
         let client = self.client.clone();
+        let api_url = self.api_url.clone();
 
         Box::pin(async_stream::try_stream! {
             let mut stream = client
-                .post(ANTHROPIC_API_URL)
+                .post(&api_url)
                 .headers(headers)
                 .json(&request)
                 .send()

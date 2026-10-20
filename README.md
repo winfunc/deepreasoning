@@ -109,6 +109,56 @@ port = 3000
 
 See [API Docs](https://deepreasoning.chat)
 
+### Web grounding
+
+Add `web_context` to a chat request to ground both DeepSeek's reasoning and
+Claude's response in current web evidence. [Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp)
+is the built-in provider: search uses Fast mode and needs no account or API key.
+This is explicit request-time retrieval, rather than model-selected tool use.
+The chat interface continues to send ordinary chat requests.
+
+```json
+{
+  "messages": [{"role": "user", "content": "What changed in the latest Rust release?"}],
+  "web_context": {
+    "type": "search",
+    "objective": "Find the latest stable Rust release announcement and summarize its changes",
+    "search_queries": ["latest stable Rust release announcement"]
+  }
+}
+```
+
+Use the existing DeepSeek and Anthropic token headers. Both streaming and
+non-streaming requests support this field. To extract a specific page instead,
+use `"web_context": {"type": "fetch", "urls": ["https://blog.rust-lang.org/"],
+"objective": "Find the latest stable release announcement"}`. Search accepts
+1–3 queries (up to 500 characters each) and an objective up to 5,000 characters;
+fetch accepts 1–3 HTTP(S) URLs without embedded credentials and an optional
+objective up to 200 characters.
+
+Only the explicit objective, queries or URLs are sent to Parallel. Chat history,
+system prompts and model API keys are not sent to it. Returned source text is
+untrusted evidence, capped at 25,000 characters, and included in the last user
+message sent to both models with instructions to cite source URLs. Review cited
+sources before relying on an answer. Retrieval adds latency before the response
+starts, has a 20-second deadline, and returns a `web_context_error` (HTTP 502) on
+service or protocol failure; it never silently answers without the requested
+evidence. Free anonymous access has service limits.
+
+Omit `web_context` or set it to `null` for ordinary chat with no retrieval.
+Operators can prohibit retrieval by setting `allow_web_context = false` under
+`[server]` in `config.toml`; existing configuration files default to allowing
+explicit requests. Model choices, API credentials and custom model configuration
+continue to work as before.
+
+For a conversation or related research requests, generate a random UUID once and
+include it as `session_id` inside each `web_context` object. Reuse it for search,
+fetch, follow-up turns and retries, including retries after service limits. Start
+a new UUID for a new chat or research run; do not derive it from user information.
+If omitted, the request is treated as a standalone research run and gets a fresh
+UUID. These identifiers are separate from the MCP transport session and are never
+stored on the shared HTTP client.
+
 ### Basic Example
 
 ```python
